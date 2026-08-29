@@ -1,30 +1,50 @@
 class Solution {
     public int findShortestSubArray(int[] nums) {
-        int n = nums.length;
-        if(n==1)
-            return 1;
-        int m = 0;
-        Map<Integer,Integer> mp = new HashMap<>();
-        for(int i=0; i<n; i++)
-        {
-            mp.put(nums[i], mp.getOrDefault(nums[i], 0) + 1);
-            m = Math.max(mp.get(nums[i]),m);
 
+        int n = nums.length;
+
+        Map<Integer, Integer> mp = new HashMap<>();
+
+        // Step 1: Find frequency of each number
+        for (int num : nums) {
+            mp.put(num, mp.getOrDefault(num, 0) + 1);
         }
+
+        // Step 2: Find degree
+        int degree = 0;
+
+        for (int freq : mp.values()) {
+            degree = Math.max(degree, freq);
+        }
+
+        // Step 3: Find first and last occurrence
+        // of every number having frequency = degree
         int ans = n;
-        for(int i=0; i<n; i++)
-        {
-            Map<Integer,Integer> mp2 = new HashMap<>();
-            for(int j=i; j<n; j++)
-            {
-                mp2.put(nums[j], mp2.getOrDefault(nums[j], 0) + 1);
-                if(m==mp2.get(nums[j]))
-                {
-                    ans = Math.min(ans, j-i+1);
-                    break;
+
+        for (int key : mp.keySet()) {
+
+            if (mp.get(key) == degree) {
+
+                int first = -1;
+                int last = -1;
+
+                for (int i = 0; i < n; i++) {
+
+                    if (nums[i] == key) {
+
+                        if (first == -1) {
+                            first = i;
+                        }
+
+                        last = i;
+                    }
                 }
+
+                int length = last - first + 1;
+                ans = Math.min(ans, length);
             }
         }
+
         return ans;
     }
 }
