@@ -1,23 +1,19 @@
 class Solution {
-    public int[] twoSum(int[] numbers, int target) {
-        int left  = 0;
-        int right = numbers.length-1;
-        while(right>left)
+    public int minSubArrayLen(int target, int[] nums) {
+        int left = 0;
+        int ans = Integer.MAX_VALUE;
+        int sum = 0;
+        for(int right=0; right<nums.length; right++)
         {
-            int sum = numbers[left] + numbers[right];
-            if(sum==target)
+            sum += nums[right];
+            while(sum>=target)
             {
-                return new int[] {left+1, right+1};
-            }
-            else if(sum > target)
-            {
-                right--;
-            }
-            else
-            {
+                sum = sum - nums[left];
+                ans = Math.min(right-left+1, ans);
                 left++;
             }
         }
-        return new int[] {-1,-1};
+        return ans==Integer.MAX_VALUE ? 0 : ans;
+
     }
 }
