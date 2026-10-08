@@ -8,37 +8,41 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
+
+class ListNode{
+    int va1;
+    ListNode next;
+
+    ListNode(int val)
+    {
+        this.val = val;
+        this.next = null;
+    }
+
+}
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
-        Map<Integer,Integer> mp = new LinkedHashMap<>();
-        ListNode temp = head;
-        int c = 0;
-        while(temp!=null)
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode prev = dummy;
+        ListNode curr = head;
+        while(curr!=null)
         {
-            mp.put(temp.val, mp.getOrDefault(temp.val,0)+1);
-            c++;
-            temp = temp.next;
-        }
-        ListNode newNode = null;
-        ListNode tail = null;
-        for(int key : mp.keySet())
-        {
-            if(mp.get(key)==1)
+            if(curr.next!=null && curr.val == curr.next.val)
             {
-                ListNode m = new ListNode(key);
-                if(newNode==null)
+                int value = curr.val;
+                while(curr!=null && value == curr.val)
                 {
-                    newNode = m;
-                    tail = m;
+                    curr = curr.next;
                 }
-                else
-                {
-                    tail.next = m;
-                    tail = m;
-                }
+                prev.next = curr;
+            }
+            else
+            {
+                prev = curr;
+                curr = curr.next;
             }
         }
-        return newNode;
-
+        return dummy.next;
     }
 }
